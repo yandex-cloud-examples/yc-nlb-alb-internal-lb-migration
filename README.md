@@ -1,5 +1,7 @@
-# Название сценария
+# Миграция сервисов с внешнего балансировщика NLB на L7-балансировщик ALB с целевым ресурсом — внутренним сетевым балансировщиком NLB с помощью Terraform
 
-Описание сценария и инструкция по его применению.
+Сервисы могут быть развернуты в Yandex Cloud с использованием балансировщика [Yandex Network Load Balancer](https://yandex.cloud/ru/docs/network-load-balancer) (NLB), который распределяет трафик по облачным ресурсам. Трафик, поступающий на внешний сетевой балансировщик, может быть распределен на поды балансировщика, развернутые в кластере [Yandex Managed Service for Kubernetes](https://yandex.cloud/ru/docs/managed-kubernetes).
 
-Для практических руководств обязательна ссылка на документацию.
+Для защиты таких сервисов от DDoS-атак и ботов на уровне приложений (L7) с помощью [Yandex Smart Web Security](https://yandex.cloud/ru/docs/smartwebsecurity) потребуется мигрировать сервис с внешнего сетевого балансировщика на L7-балансировщик [Yandex Application Load Balancer](https://yandex.cloud/ru/docs/application-load-balancer) (ALB). При этом будет создан внутренний сетевой балансировщик для балансировки трафика на поды Ingress-контроллера NGINX, развернутые в кластере Managed Service for Kubernetes, а в целевой группе L7-балансировщика будет указан IP-адрес внутреннего сетевого балансировщика.
+
+Подготовка инфраструктуры через Terraform описана в [практическом руководстве](https://yandex.cloud/ru/docs/tutorials/security/migration-from-nlb-to-alb/nlb-as-target-resource-alb/terraform). Необходимые для настройки конфигурационные файлы [alb-int-nlb-http.tf](alb-int-nlb-http.tf) и [alb-int-nlb-https.tf](alb-int-nlb-https.tf) расположены в этом репозитории.
