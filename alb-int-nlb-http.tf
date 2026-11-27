@@ -13,8 +13,8 @@ locals {
   # The following settings are predefined. Change them only if necessary.
   network_name        = "alb-network"        # Network name
   subnet_a_name       = "alb-subnet-a"       # Subnet-a name
-  subnet_b_name       = "alb-subnet-b"       # Subnet-b name
-  subnet_d_name       = "alb-subnet-d"       # Subnet-d name
+  subnet_b_name       = "alb-subnet-d"       # Subnet-d name
+  subnet_d_name       = "alb-subnet-f"       # Subnet-f name
   security_group_name = "alb-security-group" # Security group name
   static_address_name = "alb-static-address" # Static address name
   target_group_name   = "alb-target-group"   # Target group name
@@ -38,18 +38,18 @@ resource "yandex_vpc_subnet" "alb-subnet-a" {
   v4_cidr_blocks = ["10.51.0.0/16"]
 }
 
-resource "yandex_vpc_subnet" "alb-subnet-b" {
-  description    = "Subnet-b in the ru-central1-b availability zone for Application Load Balancer network"
-  name           = local.subnet_b_name
-  zone           = "ru-central1-b"
-  network_id     = local.network_id
-  v4_cidr_blocks = ["10.52.0.0/16"]
-}
-
 resource "yandex_vpc_subnet" "alb-subnet-d" {
   description    = "Subnet-d in the ru-central1-d availability zone for Application Load Balancer network"
   name           = local.subnet_d_name
   zone           = "ru-central1-d"
+  network_id     = local.network_id
+  v4_cidr_blocks = ["10.52.0.0/16"]
+}
+
+resource "yandex_vpc_subnet" "alb-subnet-f" {
+  description    = "Subnet-f in the ru-central1-f availability zone for Application Load Balancer network"
+  name           = local.subnet_f_name
+  zone           = "ru-central1-f"
   network_id     = local.network_id
   v4_cidr_blocks = ["10.53.0.0/16"]
 }
@@ -181,12 +181,12 @@ resource "yandex_alb_load_balancer" "alb" {
       subnet_id = yandex_vpc_subnet.alb-subnet-a.id
     }
     location {
-      zone_id   = "ru-central1-b"
-      subnet_id = yandex_vpc_subnet.alb-subnet-b.id
-    }
-    location {
       zone_id   = "ru-central1-d"
       subnet_id = yandex_vpc_subnet.alb-subnet-d.id
+    }
+    location {
+      zone_id   = "ru-central1-f"
+      subnet_id = yandex_vpc_subnet.alb-subnet-f.id
     }
   }
 
